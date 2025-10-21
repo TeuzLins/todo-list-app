@@ -1,0 +1,81 @@
+<div class="container">
+  <div class="form-card">
+    <h1>{{ modoEdicao ? 'Editar Tarefa' : 'Nova Tarefa' }}</h1>
+
+    <form (ngSubmit)="salvar()" #tarefaForm="ngForm">
+      
+      <div class="form-group">
+        <label for="titulo">Título *</label>
+        <input 
+          id="titulo" 
+          type="text" 
+          [(ngModel)]="tarefa.titulo" 
+          name="titulo" 
+          required 
+          minlength="3" 
+          #titulo="ngModel" 
+          placeholder="Digite o título da tarefa" 
+          [class.input-invalido]="titulo.invalid && titulo.touched"
+        >
+        <div class="mensagens-erro" *ngIf="titulo.invalid && titulo.touched">
+          <small *ngIf="titulo.errors?.['required']">
+            O título é obrigatório
+          </small>
+          <small *ngIf="titulo.errors?.['minlength']">
+            O título deve ter no mínimo 3 caracteres
+          </small>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="descricao">Descrição</label>
+        <textarea 
+          id="descricao" 
+          [(ngModel)]="tarefa.descricao" 
+          name="descricao" 
+          rows="5" 
+          placeholder="Digite a descrição da tarefa (opcional)"
+        ></textarea>
+      </div>
+
+      <div class="form-group" *ngIf="modoEdicao">
+        <label class="checkbox-label">
+          <input 
+            type="checkbox" 
+            [(ngModel)]="tarefa.concluida" 
+            name="concluida"
+          >
+          <span>Tarefa concluída</span>
+        </label>
+      </div>
+
+      <div class="preview">
+        <h3>Preview</h3>
+        <div class="preview-content">
+          <p><strong>Título:</strong> {{ tarefa.titulo || '(vazio)' }}</p>
+          <p><strong>Descrição:</strong> {{ tarefa.descricao || '(vazio)' }}</p>
+          <p><strong>Status:</strong> 
+            <span [class.texto-verde]="tarefa.concluida" [class.texto-amarelo]="!tarefa.concluida"> 
+              {{ tarefa.concluida ? ' Concluída' : 'Pendente' }}
+            </span>
+          </p>
+        </div>
+      </div>
+
+      <div class="form-acoes">
+        <button 
+          type="submit" 
+          class="btn-salvar" 
+          [disabled]="tarefaForm.invalid">
+          {{ modoEdicao ? 'Atualizar' : 'Salvar' }}
+        </button>
+        <button 
+          type="button" 
+          class="btn-cancelar" 
+          (click)="cancelar()">
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

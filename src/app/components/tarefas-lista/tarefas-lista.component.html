@@ -1,0 +1,93 @@
+<div class="container">
+  <div class="header">
+    <h1>Minhas Tarefas</h1>
+    <button routerLink="/tarefas/nova" class="btn-primary">
+      + Nova Tarefa
+    </button>
+  </div>
+
+  <div class="stats">
+    <div class="stat-card">
+      <span class="stat-number">{{ tarefas.length }}</span>
+      <span class="stat-label">Total</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-number">{{ totalPendentes }}</span>
+      <span class="stat-label">Pendentes</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-number">{{ totalConcluidas }}</span>
+      <span class="stat-label">Concluídas</span>
+    </div>
+  </div>
+
+  <div class="filtros">
+    <button
+      [class.ativo]="filtro === 'todas'"
+      (click)="filtro = 'todas'">
+      Todas
+    </button>
+    <button
+      [class.ativo]="filtro === 'pendentes'"
+      (click)="filtro = 'pendentes'">
+      Pendentes
+    </button>
+    <button
+      [class.ativo]="filtro === 'concluidas'"
+      (click)="filtro = 'concluidas'">
+      Concluídas
+    </button>
+  </div>
+
+  <div *ngIf="tarefasFiltradas.length === 0" class="vazio">
+    <p>Nenhuma tarefa encontrada.</p>
+  </div>
+
+  <div class="tarefas-grid">
+    <div
+      *ngFor="let tarefa of tarefasFiltradas"
+      class="tarefa-card"
+      [class.concluida]="tarefa.concluida">
+      
+      <div class="tarefa-header">
+        <div class="tarefa-titulo">
+          <input
+            type="checkbox"
+            [checked]="tarefa.concluida"
+            (change)="alternarConclusao(tarefa.id)">
+          <h3>{{ tarefa.titulo }}</h3>
+        </div>
+        <span
+          class="status-badge"
+          [class.badge-concluida]="tarefa.concluida">
+          {{ tarefa.concluida ? 'Concluída' : 'Pendente' }}
+        </span>
+      </div>
+
+      <p *ngIf="tarefa.descricao" class="descricao">
+        {{ tarefa.descricao }}
+      </p>
+      
+      <div class="tarefa-footer">
+        <small>Criada em: {{ tarefa.dataCriacao | date:'dd/MM/yyyy' }}</small>
+        
+        <div class="acoes">
+          <button
+            [routerLink]="['/tarefas', tarefa.id, 'editar']"
+            class="btn-editar">
+            Editar
+          </button>
+          <button
+            (click)="excluir(tarefa.id)"
+            class="btn-excluir">
+            Excluir
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button routerLink="/" class="btn-voltar">
+    ← Voltar para Home
+  </button>
+</div>
